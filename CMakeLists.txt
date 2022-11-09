@@ -12,7 +12,6 @@ find_package(OpenCV ${OCV_VERSION} REQUIRED)
 # find_package(OpenCV)
 
 catkin_package(
- INCLUDE_DIRS include
  LIBRARIES ${PROJECT_NAME}
  CATKIN_DEPENDS cv_bridge image_transport roscpp std_msgs
 )
