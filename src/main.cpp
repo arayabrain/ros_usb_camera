@@ -12,12 +12,12 @@ int main(int argc, char** argv) {
     image_transport::ImageTransport it(nh);
     image_transport::Publisher image_pub = it.advertise("image", 10);
     cv::Mat image;
-
-    ros::Rate looprate (15); // capture image at 10Hz
     //Input video
-    int camera_device_id_;
+    int camera_device_id_, rate_;
     nh.param("camera_device_id", camera_device_id_, 0);
-    cout << "camera_device_id:" << camera_device_id_ << endl;
+    nh.param("rate", rate_, 10);
+    cout << "camera_device_id:" << camera_device_id_ << " rate:" << rate_ << endl;
+    ros::Rate looprate (rate_);
 
     VideoCapture cap;
     bool ok = cap.open(camera_device_id_);
