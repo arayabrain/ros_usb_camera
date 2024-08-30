@@ -49,7 +49,10 @@ def main():
     # 画像の歪み補正
     input, output = undistort_image(args.image_path, mtx, dist)
 
-    cv2.imshow("Comparison", output)
+    comparison = np.vstack((input, output))
+    print(comparison.shape)
+    cv2.imshow("Comparison", comparison)
+    cv2.imwrite("comparison.png", comparison)
 
     # 画像の表示（オプション）
     cv2.waitKey(0)
