@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import cv2
 import numpy as np
+
 import rospy
 from sensor_msgs.msg import Image, CompressedImage
 from cv_bridge import CvBridge
@@ -41,25 +42,27 @@ def start_node():
     rospy.loginfo(f"Using pipeline: {src}")
 
     cap = cv2.VideoCapture(src, cv2.CAP_GSTREAMER)
-    
+
     bridge = CvBridge()
 
     while not rospy.is_shutdown():
         ret, frame = cap.read()
         try:
-            if use_compression:
-                timestamp = rospy.Time.now()
-                compressed_msg = CompressedImage()
-                compressed_msg.header.stamp = timestamp
-                compressed_msg.format = "jpeg"
-                compressed_msg.data = np.array(
-                    cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])[1]).tobytes()
-                pub_theta_camera.publish(compressed_msg)
-            else:
-                pub_theta_camera.publish(bridge.cv2_to_imgmsg(frame, "bgr8"))
+            if frame is not None:
+                if use_compression:
+                    timestamp = rospy.Time.now()
+                    compressed_msg = CompressedImage()
+                    compressed_msg.header.stamp = timestamp
+                    compressed_msg.format = "jpeg"
+                    compressed_msg.data = np.array(
+                        cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])[1]).tobytes()
+                    pub_theta_camera.publish(compressed_msg)
+                else:
+                    pub_theta_camera.publish(bridge.cv2_to_imgmsg(frame, "bgr8"))
         except Exception as e:
             rospy.logerr(f"Error publishing image: {e}")
             pass
+
 
     cap.release()
 
