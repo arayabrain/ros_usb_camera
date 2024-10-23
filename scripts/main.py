@@ -3,6 +3,7 @@ import rospy
 from sensor_msgs.msg import Image, CompressedImage
 import numpy as np
 import cv2
+print(cv2.getBuildInformation())
 from cv_bridge import CvBridge, CvBridgeError
 
 
@@ -47,8 +48,12 @@ def start_node():
         + str(framerate)
         + "/1 !jpegdec !videoconvert !appsink sync=0"
     )
+    # src = "videotestsrc ! videoconvert ! appsink"
     print(src)
     cap = cv2.VideoCapture(src)
+    if not cap.isOpened():
+        print("GStreamerパイプラインを開くことができませんでした")
+        return
     bridge = CvBridge()
 
     while not rospy.is_shutdown():
@@ -62,6 +67,7 @@ def start_node():
             else:
                 pub_front_camera.publish(bridge.cv2_to_imgmsg(frame_read, "bgr8"))
         except Exception as e:
+            # print(e)
             pass
 
     cap.release()

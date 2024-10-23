@@ -58,7 +58,10 @@ def start_node():
                         cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])[1]).tobytes()
                     pub_theta_camera.publish(compressed_msg)
                 else:
-                    pub_theta_camera.publish(bridge.cv2_to_imgmsg(frame, "bgr8"))
+                    timestamp = rospy.Time.now()
+                    msg = bridge.cv2_to_imgmsg(frame, "bgr8")
+                    msg.header.stamp = timestamp
+                    pub_theta_camera.publish(msg)
         except Exception as e:
             rospy.logerr(f"Error publishing image: {e}")
             pass
