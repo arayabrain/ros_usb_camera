@@ -1,6 +1,9 @@
 <launch>
-    <node pkg="usb_camera" type="usb_camera" name="usb">
+    <node pkg="usb_camera" type="main.py" name="usb">
       <!-- Parameters used to find the camera -->
       <param name="camera_device_id" value="0"/>
+      <param name="width" value="1920"/>
+      <param name="height" value="1080"/>
+      <param name="framerate" value="30"/>
     </node>
 </launch>

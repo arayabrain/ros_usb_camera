@@ -27,6 +27,7 @@ install(TARGETS ${PROJECT_NAME}
 )
 install(PROGRAMS
   scripts/main.py
+  scripts/theta_camera.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
